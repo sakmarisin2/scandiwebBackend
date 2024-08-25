@@ -19,7 +19,7 @@ class ValidatePostData implements ValidatorInterface {
         ];
     }
 
-    public function validate(array $data): bool {
+    public function validate(array $data): bool{
         $validationResults = array_map(
             fn($key, $rules) => $this->applyRules($data[$key] ?? null, $rules),
             array_keys($this->rules),
@@ -37,7 +37,7 @@ class ValidatePostData implements ValidatorInterface {
         return $allFieldsValid && $productsValidation;
     }
 
-    private function applyRules($value, array $rules): bool {
+    private function applyRules($value, array $rules): bool{
         return array_reduce(
             $rules,
             fn($carry, $rule) => $carry && $rule->validate($value),
