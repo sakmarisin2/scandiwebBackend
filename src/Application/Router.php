@@ -32,7 +32,7 @@ class Router implements RouterInterface{
         $this->handler = new $controllerClass($state, $this->conn);
     }
 
-    public function route():void{
+    public function route(): void{
         $this->handler->handleRequest();
     }
 }
