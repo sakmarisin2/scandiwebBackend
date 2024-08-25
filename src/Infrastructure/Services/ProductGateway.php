@@ -25,7 +25,7 @@ class ProductGateway implements GatewayInterface{
         return $products;
     }
 
-    public function createProduct(array $data):?int{
+    public function createProduct(array $data): ?int{
         if (!$this->validator->validate($data)) {
             return null;
         }
@@ -42,7 +42,7 @@ class ProductGateway implements GatewayInterface{
         return (int)$result;
     }
 
-    public function deleteProducts(array $data):?string{
+    public function deleteProducts(array $data): ?string{
         if (!$this->validator->validate($data)) {
             return null;
         }
