@@ -15,18 +15,23 @@ class ProductRepository extends BaseRepository{
     }
     public function insert(BaseProduct $product): string{
         try{
-            $stmt = $this->conn->prepare("INSERT INTO " . self::TABLE ."(name, type_id,SKU,price) VALUES (?, ?,?, ?)");
+            $this->conn->beginTransaction();
 
+            $stmt = $this->conn->prepare("INSERT INTO " . self::TABLE ."(name, type_id,SKU,price) VALUES (?, ?,?, ?)");
             $stmt->execute([$product-> getName(), $product->getType(),$product->getSKU(),$product->getPrice()]);
-            
             $result = $this->conn->lastInsertId();
+
             foreach ($product->getAttributes() as $attribute_name => $attribute_value) {
                 $stmt = $this->conn->prepare("INSERT INTO ". self::ATTR_TABLE . " (product_id, attribute_name, attribute_value) VALUES (?, ?, ?)");
-                $stmt->execute([$this->conn->lastInsertId(), $attribute_name, $attribute_value]);
+                $stmt->execute([$result, $attribute_name, $attribute_value]);
             }
+
+            $this->conn->commit();
+
             return $result;
 
         }catch(Exception $e){
+            $this->conn->rollBack();
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
     }
@@ -44,18 +49,23 @@ class ProductRepository extends BaseRepository{
             $stmt -> execute();
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $products = [];
-                foreach ($results as $row) {
-                        $products[$row['product_id']] = [
-                            'product_id' => $row['product_id'],
-                            'SKU' => $row['SKU'],
-                            'name' => $row['product_name'],
-                            'price' => $row['price'],
-                            'type' => $row['product_type'],
-                            'attributes' => []
-                        ];
 
-                        $products[$row['product_id']]['attributes'][$row['attribute_name']] = $row['attribute_value'];
+            foreach ($results as $row) {
+                if (!isset($products[$row['product_id']])) {
+                    $products[$row['product_id']] = [
+                        'product_id' => $row['product_id'],
+                        'SKU' => $row['SKU'],
+                        'name' => $row['product_name'],
+                        'price' => $row['price'],
+                        'type' => $row['product_type'],
+                        'attributes' => []
+                    ];
                 }
+
+                if ($row['attribute_name']) {
+                    $products[$row['product_id']]['attributes'][$row['attribute_name']] = $row['attribute_value'];
+                }
+            }
             return $products;
         }catch(Exception $e){
             throw new Exception($e->getMessage(), $e->getCode());

@@ -12,6 +12,9 @@ $env = parse_ini_file('.env');
 Autoloader::register();
 
 set_exception_handler(['Infrastructure\Services\ErrorHandler', 'handleException']);
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Content-type: application/json; charset=UTF-8");
 
 $database = new Database(
