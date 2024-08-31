@@ -4,6 +4,7 @@ namespace Infrastructure\Repos;
 
 use Domain\Core\BaseRepository;
 use Domain\Core\BaseProduct;
+use Infrastructure\DTO\ProductDto;
 use Exception;
 use PDO;
 
@@ -35,6 +36,7 @@ class ProductRepository extends BaseRepository{
             return $result;
 
         }catch(Exception $e){
+
             $this->conn->rollBack();
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
@@ -54,35 +56,40 @@ class ProductRepository extends BaseRepository{
 
             foreach ($results as $row) {
                 if (!isset($products[$row['product_id']])) {
-                    $products[$row['product_id']] = [
-                        'product_id' => $row['product_id'],
-                        'SKU' => $row['SKU'],
-                        'name' => $row['product_name'],
-                        'price' => $row['price'],
-                        'type' => $row['product_type'],
-                        'attributes' => []
-                    ];
-                }
-
-                if ($row['attribute_name']) {
-                    $products[$row['product_id']]['attributes'][$row['attribute_name']] = $row['attribute_value'];
+                    $products[$row['product_id']] = new ProductDto(
+                        $row['product_id'],
+                        $row['SKU'],
+                        $row['product_name'],
+                        $row['price'],
+                        $row['product_type'],
+                        $row['attributes'],
+                    );
                 }
             }
+
             return $products;
+
         }catch(Exception $e){
+
             throw new Exception($e->getMessage(), $e->getCode());
         }
     }
     public function delete($productIds = []): string{
         try{
+            $this->conn->beginTransaction();
+
             $placeholders = implode(',', array_fill(0, count($productIds), '?'));
             $sql = "DELETE FROM ". self::TABLE ." WHERE id IN ($placeholders)";
     
             $stmt = $this->conn ->prepare($sql);
             $stmt->execute($productIds);
+
+            $this->conn->commit();
     
             return "Deleted " . $stmt->rowCount() . " products successfully.";
         }catch(Exception $e){
+
+            $this->conn->rollBack();
             throw new Exception($e->getMessage(), $e->getCode());
         }
     }

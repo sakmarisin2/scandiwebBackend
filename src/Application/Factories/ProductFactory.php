@@ -2,13 +2,14 @@
 
 namespace Application\Factories;
 
+use Application\Validation\PostRequestDto;
 use Domain\Core\BaseProduct;
 use Domain\Entities\Book;
 use Domain\Entities\DVD;
 use Domain\Entities\Furniture;
 
 class ProductFactory{
-    private static $paramSet = ['SKU', 'name', 'price', 'type'];
+    private static $paramSet = ['SKU', 'Name', 'Price', 'Type'];
     private static $classMap = [
         1 => [
             'class' => DVD::class,
@@ -24,24 +25,29 @@ class ProductFactory{
         ],
     ];
 
-    public static function create(array $data):BaseProduct{
-        $classInfo = self::$classMap[$data['type']];
+    public static function create(PostRequestDto $data): BaseProduct
+    {
+        $typeId = $data->getType();
+        
+        if (!isset(self::$classMap[$typeId])) {
+            throw new \InvalidArgumentException("Unsupported typeId: $typeId");
+        }
+        
+        $classInfo = self::$classMap[$typeId];
         $className = $classInfo['class'];
         $params = $classInfo['params'];
 
-        $dataAttributes = $data['attributes'];
-        unset($data['attributes']);
-
         $constructorArgs = [];
+        
         foreach (self::$paramSet as $param) {
-            if (isset($data[$param])) {
-                $constructorArgs[] = $data[$param];
-            }
+            $getter = 'get' . ucfirst($param);
+            $constructorArgs[] = $data->$getter();
         }
+
+        $attributes = $data->getAttributes();
+        
         foreach ($params as $param) {
-            if (isset($dataAttributes[$param])) {
-                $constructorArgs[] = $dataAttributes[$param];
-            }
+            $constructorArgs[] = $attributes[$param];
         }
 
         return new $className(...$constructorArgs);

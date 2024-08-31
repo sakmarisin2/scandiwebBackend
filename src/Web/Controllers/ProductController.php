@@ -7,6 +7,9 @@ use Web\WebServices\BaseController;
 use Web\WebServices\RequestState;
 use Application\Services\ProductGateway;
 use Application\Factories\ResponseFactory;
+use Application\Validation\PostRequestDto;
+use Application\Validation\DeleteRequestDto;
+use Application\Transformers\ProductDtoTransformer;
 
 class ProductController extends BaseController {
     private RequestState $state;
@@ -36,15 +39,26 @@ class ProductController extends BaseController {
     public function handleGet(): void {
 
         $data = $this->gateway->getProducts();
-
-        $this->responseContext->setStrategy(ResponseFactory::createStrategy($data));
-        $this->responseContext->executeStrategy($data ?? []);
+        $productArray = ProductDtoTransformer::transformCollection($data);
+        
+        $this->responseContext->setStrategy(ResponseFactory::createStrategy($productArray));
+        $this->responseContext->executeStrategy($productArray ?? []);
     }
 
     public function handlePost(): void {
 
         $this->getPayload();
-        $result = $this->gateway->createProduct($this->payload);
+        $payload = $this->payload;
+        $dto = new PostRequestDto($payload['sku'],
+                                  $payload['name'],
+                                  $payload['price'],
+                                  $payload['type'],
+                                  $payload['attributes']);
+        if($dto -> hasErrors()) {
+            $this->responseContext->setStrategy(ResponseFactory::createStrategy('default'));
+            $this->responseContext->executeStrategy($dto->getErrors() ?? []);
+        }
+        $result = $this->gateway->createProduct($dto);
 
         $this->responseContext->setStrategy(ResponseFactory::createStrategy($result));
         $this->responseContext->executeStrategy($result);
@@ -53,7 +67,15 @@ class ProductController extends BaseController {
     public function handleDelete(): void {
 
         $this->getPayload();
-        $result = $this->gateway->deleteProducts($this->payload);
+        $data = $this->payload;
+        $dto = new DeleteRequestDto($data['products']);
+
+        if($dto -> hasErrors()) {
+            $this->responseContext->setStrategy(ResponseFactory::createStrategy('default'));
+            $this->responseContext->executeStrategy($dto->getErrors() ?? []);
+        }
+
+        $result = $this->gateway->deleteProducts($dto);
 
         $this->responseContext->setStrategy(ResponseFactory::createStrategy($result));
         $this->responseContext->executeStrategy([

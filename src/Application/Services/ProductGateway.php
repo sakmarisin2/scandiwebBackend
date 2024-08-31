@@ -2,16 +2,15 @@
 
 namespace Application\Services;
 
-use Application\Validation\ValidatePostData;
-use Application\Services\ValidatorManager;
 use Application\Factories\ProductFactory;
+use Application\Validation\DeleteRequestDto;
+use Application\Validation\PostRequestDto;
 use Domain\Interfaces\GatewayInterface;
 use Infrastructure\Repos\ProductRepository;
 use Infrastructure\Database\Database;
 
 class ProductGateway implements GatewayInterface{
     private ProductRepository $repository;
-    private ValidatorManager $validator;
 
     public function __construct()
     {
@@ -25,9 +24,6 @@ class ProductGateway implements GatewayInterface{
             $env["CERT_PATH"]
         );
         $this ->repository = new ProductRepository($database -> getConnection());
-        $this ->validator = new ValidatorManager(
-            new ValidatePostData()
-        );
     }
 
     public function getProducts(): array{
@@ -35,10 +31,7 @@ class ProductGateway implements GatewayInterface{
         return $products;
     }
 
-    public function createProduct(array $data): ?int{
-        if (!$this->validator->validate($data)) {
-            return null;
-        }
+    public function createProduct(PostRequestDto $data): int{
 
         $product = ProductFactory::create($data);
 
@@ -47,9 +40,9 @@ class ProductGateway implements GatewayInterface{
         return (int)$result;
     }
 
-    public function deleteProducts(array $data): ?string{
+    public function deleteProducts(DeleteRequestDto $data): string{
         
-        $result = $this->repository->delete($data["products"]);
+        $result = $this->repository->delete($data -> getAttributes());
         return $result;
     }
 }

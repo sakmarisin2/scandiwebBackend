@@ -4,9 +4,9 @@ namespace Application\Validation\Rules;
 
 use Domain\Interfaces\ValidationRule;
 
-class NotEmptyRule implements ValidationRule {
+class NotNumericRule implements ValidationRule {
     public function validate($value): bool{
-        return trim($value) !== '';
+        return !is_numeric( $value );
     }
 
     public function getErrorMessage(): string{
