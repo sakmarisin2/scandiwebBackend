@@ -1,6 +1,7 @@
 <?php
 
-namespace Infrastructure\Database\Repos;
+namespace Infrastructure\Repos;
+
 use Domain\Core\BaseRepository;
 use Domain\Core\BaseProduct;
 use Exception;
@@ -18,7 +19,10 @@ class ProductRepository extends BaseRepository{
             $this->conn->beginTransaction();
 
             $stmt = $this->conn->prepare("INSERT INTO " . self::TABLE ."(name, type_id,SKU,price) VALUES (?, ?,?, ?)");
-            $stmt->execute([$product-> getName(), $product->getType(),$product->getSKU(),$product->getPrice()]);
+            $stmt->execute([$product-> getName(), 
+                            $product-> getType(),
+                            $product-> getSKU(),
+                            $product-> getPrice()]);
             $result = $this->conn->lastInsertId();
 
             foreach ($product->getAttributes() as $attribute_name => $attribute_value) {
@@ -37,13 +41,11 @@ class ProductRepository extends BaseRepository{
     }
     public function selectAll():array{
         try{
-            $sql = "
-            SELECT p.id AS product_id, p.SKU, p.price, p.name AS product_name, pt.type_name AS product_type, pa.attribute_name, pa.attribute_value
-            FROM " . self::TABLE . " p
-            JOIN product_types pt ON p.type_id = pt.id
-            LEFT JOIN " . self::ATTR_TABLE . " pa ON p.id = pa.product_id
-            ORDER BY p.name;
-            ";
+            $sql = "SELECT p.id AS product_id, p.SKU, p.price, p.name AS product_name, pt.type_name AS product_type, pa.attribute_name, pa.attribute_value
+                    FROM " . self::TABLE . " p
+                    JOIN product_types pt ON p.type_id = pt.id
+                    LEFT JOIN " . self::ATTR_TABLE . " pa ON p.id = pa.product_id
+                    ORDER BY p.name;";
 
             $stmt = $this-> conn -> prepare($sql);
             $stmt -> execute();

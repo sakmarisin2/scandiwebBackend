@@ -1,18 +1,15 @@
 <?php
 
-namespace Application;
+namespace Web;
 
-use Domain\Interfaces\RouterInterface;
-use Application\Controllers\ProductController;
-use Infrastructure\Database\Database;
-use Domain\Core\BaseController;
-use Infrastructure\Requests\DeleteState;
-use Infrastructure\Requests\PostState;
-use Infrastructure\Requests\GetState;
-use PDO;
+use Web\WebServices\RouterInterface;
+use Web\Controllers\ProductController;
+use Web\WebServices\BaseController;
+use Web\Requests\DeleteState;
+use Web\Requests\PostState;
+use Web\Requests\GetState;
 
 class Router implements RouterInterface{
-    private PDO $conn;
     private BaseController $handler;
     private $methodToStateMap = [
         'GET'    => GetState::class,
@@ -23,13 +20,17 @@ class Router implements RouterInterface{
         'products' => ProductController::class
     ];
 
-    public function __construct(Database $db,string $endpoint,string $method)
+    public function __construct(string $endpoint,string $method)
     {
-        $this->conn = $db->getConnection();
+        if (!isset($this->endpointToControllerMap[$endpoint])) {
+            http_response_code(404);
+            echo json_encode(['error' => 'Endpoint not found']);
+            exit;
+        }
         $controllerClass = $this->endpointToControllerMap[$endpoint];
         $stateClass = $this->methodToStateMap[$method];
         $state = new $stateClass();
-        $this->handler = new $controllerClass($state, $this->conn);
+        $this->handler = new $controllerClass($state);
     }
 
     public function route(): void{

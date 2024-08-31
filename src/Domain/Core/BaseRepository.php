@@ -1,5 +1,7 @@
 <?php
+
 namespace Domain\Core;
+
 use Domain\Core\BaseProduct;
 abstract class BaseRepository{
     abstract function insert(BaseProduct $product): string;

@@ -1,26 +1,36 @@
 <?php
 
-namespace Infrastructure\Services;
+namespace Application\Services;
 
-use Domain\Entities\Product;
+use Application\Validation\ValidatePostData;
+use Application\Services\ValidatorManager;
+use Application\Factories\ProductFactory;
 use Domain\Interfaces\GatewayInterface;
-use Infrastructure\Database\Repos\ProductRepository;
-use Infrastructure\Validation\ValidatePostData;
-use Infrastructure\Services\ValidatorManager;
+use Infrastructure\Repos\ProductRepository;
+use Infrastructure\Database\Database;
 
 class ProductGateway implements GatewayInterface{
     private ProductRepository $repository;
     private ValidatorManager $validator;
 
-    public function __construct(ProductRepository $repository)
+    public function __construct()
     {
-        $this ->repository = $repository;
+        $env = parse_ini_file('.env');
+        $database = new Database(
+            $env["HOST"],
+            $env["NAME"],
+            $env["USER"],
+            $env["PSWD"],
+            $env["PORT"],
+            $env["CERT_PATH"]
+        );
+        $this ->repository = new ProductRepository($database -> getConnection());
         $this ->validator = new ValidatorManager(
             new ValidatePostData()
         );
     }
 
-    public function getAll(): array{
+    public function getProducts(): array{
         $products = $this->repository->selectAll();
         return $products;
     }
@@ -30,12 +40,7 @@ class ProductGateway implements GatewayInterface{
             return null;
         }
 
-        $product = new Product();
-        $product -> setName($data["name"]);
-        $product -> setSKU($data["SKU"]);
-        $product -> setPrice($data["price"]);
-        $product -> setType($data["type"]);
-        $product -> setAttributes($data["attributes"]);
+        $product = ProductFactory::create($data);
 
         $result = $this ->repository -> insert($product);
 
@@ -43,9 +48,6 @@ class ProductGateway implements GatewayInterface{
     }
 
     public function deleteProducts(array $data): ?string{
-        if (!$this->validator->validate($data)) {
-            return null;
-        }
         
         $result = $this->repository->delete($data["products"]);
         return $result;

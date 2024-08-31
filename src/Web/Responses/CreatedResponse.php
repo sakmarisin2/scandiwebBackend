@@ -1,6 +1,8 @@
 <?php
-namespace Infrastructure\Responses;
-use Domain\Interfaces\ResponseStrategy;
+
+namespace Web\Responses;
+
+use Web\WebServices\ResponseStrategy;
 
 class CreatedResponse implements ResponseStrategy {
     public function handle($data): void {

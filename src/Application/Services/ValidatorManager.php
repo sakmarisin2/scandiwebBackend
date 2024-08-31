@@ -1,6 +1,6 @@
 <?php
 
-namespace Infrastructure\Services;
+namespace Application\Services;
 
 use Domain\Interfaces\ValidatorInterface;
 

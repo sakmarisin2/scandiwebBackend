@@ -1,7 +1,8 @@
 <?php
 
-namespace Infrastructure\Services;
-use Domain\Interfaces\ResponseStrategy;
+namespace Web;
+
+use Web\WebServices\ResponseStrategy;
 
 class ResponseContext {
     private ResponseStrategy $strategy;

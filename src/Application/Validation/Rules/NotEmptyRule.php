@@ -1,7 +1,8 @@
 <?php 
-namespace Infrastructure\Validation\Rules;
-use Domain\Interfaces\ValidationRule;
 
+namespace Application\Validation\Rules;
+
+use Domain\Interfaces\ValidationRule;
 
 class NotEmptyRule implements ValidationRule {
     public function validate($value): bool{

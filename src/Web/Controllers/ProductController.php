@@ -1,13 +1,12 @@
 <?php
-namespace Application\Controllers;
 
-use Domain\Interfaces\RequestState;
-use Infrastructure\Services\ProductGateway;
-use Domain\Core\BaseController;
-use Infrastructure\Database\Repos\ProductRepository;
-use Infrastructure\Services\ResponseContext;
+namespace Web\Controllers;
+
+use Web\ResponseContext;
+use Web\WebServices\BaseController;
+use Web\WebServices\RequestState;
+use Application\Services\ProductGateway;
 use Application\Factories\ResponseFactory;
-use PDO;
 
 class ProductController extends BaseController {
     private RequestState $state;
@@ -15,9 +14,9 @@ class ProductController extends BaseController {
     private array $payload;
     private ResponseContext $responseContext;
 
-    public function __construct(RequestState $state, private PDO $conn) {
+    public function __construct(RequestState $state) {
         $this->state = $state;
-        $this->gateway = new ProductGateway(new ProductRepository($this->conn));
+        $this->gateway = new ProductGateway();
         $this->responseContext = new ResponseContext(ResponseFactory::createStrategy('default'));
     }
 
@@ -36,7 +35,7 @@ class ProductController extends BaseController {
 
     public function handleGet(): void {
 
-        $data = $this->gateway->getAll();
+        $data = $this->gateway->getProducts();
 
         $this->responseContext->setStrategy(ResponseFactory::createStrategy($data));
         $this->responseContext->executeStrategy($data ?? []);

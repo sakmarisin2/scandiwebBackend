@@ -1,9 +1,11 @@
 <?php
+
 namespace Application\Factories;
-use Infrastructure\Responses\BadRequestResponse;
-use Infrastructure\Responses\SuccessResponse;
-use Infrastructure\Responses\CreatedResponse;
-use Domain\Interfaces\ResponseStrategy;
+
+use Web\Responses\BadRequestResponse;
+use Web\Responses\SuccessResponse;
+use Web\Responses\CreatedResponse;
+use Web\WebServices\ResponseStrategy;
 
 class ResponseFactory {
     public static function createStrategy($condition): ResponseStrategy {

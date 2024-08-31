@@ -1,7 +1,8 @@
 <?php
-namespace Domain\Core;
 
-use Domain\Interfaces\RequestState;
+namespace Web\WebServices;
+
+use Web\WebServices\RequestState;
 
 abstract class BaseController{
     abstract protected function getPayload():void;

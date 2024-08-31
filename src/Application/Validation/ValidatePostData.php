@@ -1,10 +1,11 @@
 <?php
-namespace Infrastructure\Validation;
+
+namespace Application\Validation;
 
 use Domain\Interfaces\ValidatorInterface;
-use Infrastructure\Validation\Rules\ArrayRule;
-use Infrastructure\Validation\Rules\IntegerRule;
-use Infrastructure\Validation\Rules\NotEmptyRule;
+use Application\Validation\Rules\ArrayRule;
+use Application\Validation\Rules\IntegerRule;
+use Application\Validation\Rules\NotEmptyRule;
 
 class ValidatePostData implements ValidatorInterface {
     private array $rules;

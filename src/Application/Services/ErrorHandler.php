@@ -1,5 +1,7 @@
 <?php
-namespace Infrastructure\Services;
+
+namespace Application\Services;
+
 use Throwable;
 
 class ErrorHandler{

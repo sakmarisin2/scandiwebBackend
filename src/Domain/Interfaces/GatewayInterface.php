@@ -3,8 +3,8 @@
 namespace Domain\Interfaces;
 
 interface GatewayInterface{
-    public function GetAll(): array;
-    public function CreateProduct(array $data): ?int;
-    public function DeleteProducts(array $data): ?string;
+    public function getProducts(): array;
+    public function createProduct(array $data): ?int;
+    public function deleteProducts(array $data): ?string;
 
 }

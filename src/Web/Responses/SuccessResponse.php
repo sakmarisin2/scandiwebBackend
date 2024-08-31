@@ -1,6 +1,9 @@
 <?php
-namespace Infrastructure\Responses;
-use Domain\Interfaces\ResponseStrategy;
+
+namespace Web\Responses;
+
+use Web\WebServices\ResponseStrategy;
+
 class SuccessResponse implements ResponseStrategy {
     public function handle($data): void {
         http_response_code(200);

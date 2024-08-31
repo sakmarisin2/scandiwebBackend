@@ -1,5 +1,6 @@
 <?php
-namespace Domain\Interfaces;
+
+namespace Web\WebServices;
 interface RouterInterface{
     public function route(): void;
 }

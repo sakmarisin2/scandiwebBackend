@@ -1,5 +1,7 @@
 <?php
+
 namespace Infrastructure\Database;
+
 use PDO;
 use PDOException;
 

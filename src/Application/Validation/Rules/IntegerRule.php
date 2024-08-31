@@ -1,5 +1,7 @@
 <?php
-namespace Infrastructure\Validation\Rules;
+
+namespace Application\Validation\Rules;
+
 use Domain\Interfaces\ValidationRule;
 
 class IntegerRule implements ValidationRule {

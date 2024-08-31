@@ -1,7 +1,9 @@
 <?php
-namespace Infrastructure\Requests;
-use Domain\Interfaces\RequestState;
-use Domain\Core\BaseController;
+
+namespace Web\Requests;
+
+use Web\WebServices\RequestState;
+use Web\WebServices\BaseController;
 
 class PostState implements RequestState{
     public function HandleRequest(BaseController $controller): void{

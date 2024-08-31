@@ -5,33 +5,25 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once __DIR__ . '/Autoloader.php';
-use Application\Router;
-use Infrastructure\Database\Database;
+use Web\Router;
 
-$env = parse_ini_file('.env');
 Autoloader::register();
 
-set_exception_handler(['Infrastructure\Services\ErrorHandler', 'handleException']);
+set_exception_handler(['Application\Services\ErrorHandler', 'handleException']);
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Content-type: application/json; charset=UTF-8");
-
-$database = new Database(
-    $env["HOST"],
-    $env["NAME"],
-    $env["USER"],
-    $env["PSWD"],
-    $env["PORT"],
-    $env["CERT_PATH"]
-);
 
 $url = trim($_SERVER["REQUEST_URI"],"/");
 $parts = explode("/",$url);
 
 $endpoint = $parts[0] ?? '';
 $method = $_SERVER['REQUEST_METHOD'];
-
-$router = new Router($database,$endpoint,$method);
+if ($method === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+$router = new Router($endpoint,$method);
 $router ->route();
 

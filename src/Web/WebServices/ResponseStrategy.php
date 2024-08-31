@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\Interfaces;
+namespace Web\WebServices;
 
 interface ResponseStrategy {
     public function handle($data): void;
