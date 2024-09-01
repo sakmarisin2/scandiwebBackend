@@ -6,11 +6,11 @@ use Domain\Core\BaseProductDto;
 
 class ProductDto extends BaseProductDto{
     private int $id;
-    protected string $name;
-    protected string $SKU;
-    protected int $price;
-    protected int $typeId;
-    protected array $attributes;
+    private string $name;
+    private string $SKU;
+    private int $price;
+    private int $typeId;
+    private array $attributes;
     public function __construct(int $id,
                                 string $SKU, 
                                 string $name, 

@@ -5,9 +5,9 @@ namespace Web;
 use Web\WebServices\RouterInterface;
 use Web\Controllers\ProductController;
 use Web\WebServices\BaseController;
-use Web\Requests\DeleteState;
-use Web\Requests\PostState;
-use Web\Requests\GetState;
+use Web\RequestState\DeleteState;
+use Web\RequestState\PostState;
+use Web\RequestState\GetState;
 
 class Router implements RouterInterface{
     private BaseController $handler;

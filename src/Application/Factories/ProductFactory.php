@@ -2,13 +2,13 @@
 
 namespace Application\Factories;
 
-use Application\Validation\PostRequestDto;
 use Domain\Core\BaseProduct;
 use Domain\Entities\Book;
 use Domain\Entities\DVD;
 use Domain\Entities\Furniture;
+use Domain\Interfaces\FactoryInterface;
 
-class ProductFactory{
+class ProductFactory implements FactoryInterface{
     private static $paramSet = ['SKU', 'Name', 'Price', 'Type'];
     private static $classMap = [
         1 => [
@@ -25,7 +25,7 @@ class ProductFactory{
         ],
     ];
 
-    public static function create(PostRequestDto $data): BaseProduct
+    public static function create($data): BaseProduct
     {
         $typeId = $data->getType();
         
@@ -45,7 +45,7 @@ class ProductFactory{
         }
 
         $attributes = $data->getAttributes();
-        
+
         foreach ($params as $param) {
             $constructorArgs[] = $attributes[$param];
         }

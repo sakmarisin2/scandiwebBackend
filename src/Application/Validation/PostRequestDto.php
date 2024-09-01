@@ -10,16 +10,16 @@ use Application\Validation\Rules\HtmlSpecialCharsRule;
 use Application\Validation\Rules\NotNumericRule;
 
 class PostRequestDto extends BaseProductDto{
-    protected string $name;
-    protected string $SKU;
-    protected int $price;
-    protected int $typeId;
-    protected array $attributes;
+    private string $name;
+    private string $SKU;
+    private int $price;
+    private int $typeId;
+    private array $attributes;
     private array $errors = [];
     private array $validationRules = [
         'string' => [new NotEmptyRule(), 
-                  new HtmlSpecialCharsRule(),
-                  new NotNumericRule()],
+                     new HtmlSpecialCharsRule(),
+                     new NotNumericRule()],
         'integer' => [new IntegerRule()],
         'array' => [new ArrayRule()]
     ];

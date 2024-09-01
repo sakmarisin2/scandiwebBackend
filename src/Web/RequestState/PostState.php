@@ -1,6 +1,6 @@
 <?php
 
-namespace Web\Requests;
+namespace Web\RequestState;
 
 use Web\WebServices\RequestState;
 use Web\WebServices\BaseController;
