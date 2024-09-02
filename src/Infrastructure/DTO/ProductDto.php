@@ -2,55 +2,21 @@
 
 namespace Infrastructure\DTO;
 
-use Domain\Core\BaseProductDto;
+use Domain\Core\BaseProduct;
 
-class ProductDto extends BaseProductDto{
+class ProductDto extends BaseProduct{
     private int $id;
-    private string $name;
-    private string $SKU;
-    private int $price;
-    private int $typeId;
     private array $attributes;
+
     public function __construct(int $id,
-                                string $SKU, 
                                 string $name, 
+                                string $SKU, 
                                 int $price, 
                                 int $typeId,
                                 array $attributes) {
-
-        $this -> setId($id);
-        $this->setName($name);
-        $this->setSKU($SKU);
-        $this->setPrice($price);
-        $this->setType($typeId);
-        $this->setAttributes($attributes);
-    }
-    public function setSKU(string $SKU):void{
-        $this->SKU=$SKU;
-    }
-    public function getSKU():string{
-        return $this->SKU;
-    }
-
-    public function setName(string $name):void{
-        $this->name=$name;
-    }
-    public function getName():string{
-        return $this->name;
-    }
-
-    public function setPrice(int $price):void{
-        $this->price = $price;
-    }
-    public function getPrice():int{
-        return $this->price;
-    }
-
-    public function setType(int $typeId):void{
-        $this->typeId= $typeId;
-    }
-    public function getType():int{
-        return $this->typeId;
+        parent::__construct($name, $SKU, $price, $typeId);
+        $this-> setId($id);
+        $this->setAttributes($attributes);   
     }
     public function setId(int $id): void{
         $this -> id = $id;

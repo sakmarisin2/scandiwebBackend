@@ -2,14 +2,14 @@
 
 namespace Application\Validation;
 
-use Domain\Core\BaseProductDto;
+use Web\WebServices\Abstracts\BaseRequestDto;
 use Application\Validation\Rules\ArrayRule;
 use Application\Validation\Rules\IntegerRule;
 use Application\Validation\Rules\NotEmptyRule;
 use Application\Validation\Rules\HtmlSpecialCharsRule;
 use Application\Validation\Rules\NotNumericRule;
 
-class PostRequestDto extends BaseProductDto{
+class PostRequestDto extends BaseRequestDto{
     private string $name;
     private string $SKU;
     private int $price;
@@ -35,7 +35,7 @@ class PostRequestDto extends BaseProductDto{
         $this->setAttributes($attributes);
     }
     public function setSKU(string $SKU):void{
-        $this -> validate('string',$SKU);
+        $this -> validate('string',$SKU,$this->validationRules);
         $this->SKU=$SKU;
     }
     public function getSKU():string{
@@ -43,7 +43,7 @@ class PostRequestDto extends BaseProductDto{
     }
 
     public function setName(string $name):void{
-        $this -> validate('string',$name);
+        $this -> validate('string',$name,$this->validationRules);
         $this->name=$name;
     }
     public function getName():string{
@@ -51,7 +51,7 @@ class PostRequestDto extends BaseProductDto{
     }
 
     public function setPrice(int $price):void{
-        $this -> validate('integer',$price);
+        $this -> validate('integer',$price,$this->validationRules);
         $this->price = $price;
     }
     public function getPrice():int{
@@ -59,16 +59,16 @@ class PostRequestDto extends BaseProductDto{
     }
 
     public function setType(int $typeId):void{
-        $this -> validate('integer',$typeId);
+        $this -> validate('integer',$typeId,$this->validationRules);
         $this->typeId= $typeId;
     }
     public function getType():int{
         return $this->typeId;
     }
     public function setAttributes(array $attributes): void{
-        $this -> validate('array',$attributes);
+        $this -> validate('array',$attributes,$this->validationRules);
         foreach($attributes as $key=>$value){
-            $this -> validate('string',$value);
+            $this -> validate('string',$value,$this->validationRules);
         }
         $this->attributes = $attributes;
     }
@@ -84,15 +84,5 @@ class PostRequestDto extends BaseProductDto{
     public function hasErrors(): bool
     {
         return !empty($this->errors);
-    }
-
-    private function validate(string $field, $value): void
-    {
-        $rules = $this->validationRules[$field] ?? [];
-        foreach ($rules as $rule) {
-            if (!$rule->validate($value)) {
-                $this->errors[] = $rule->getErrorMessage();
-            }
-        }
     }
 }

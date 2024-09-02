@@ -3,8 +3,8 @@
 namespace Web\Controllers;
 
 use Web\ResponseContext;
-use Web\WebServices\BaseController;
-use Web\WebServices\RequestState;
+use Web\WebServices\Abstracts\BaseController;
+use Web\WebServices\Interfaces\RequestState;
 use Application\Services\ProductGateway;
 use Application\Factories\ResponseFactory;
 use Application\Validation\PostRequestDto;

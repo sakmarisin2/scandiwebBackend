@@ -27,7 +27,9 @@ class ProductGateway implements GatewayInterface{
     }
 
     public function getProducts(): array{
+
         $products = $this->repository->selectAll();
+
         return $products;
     }
 
@@ -43,6 +45,7 @@ class ProductGateway implements GatewayInterface{
     public function deleteProducts(DeleteRequestDto $data): string{
         
         $result = $this->repository->delete($data -> getAttributes());
+
         return $result;
     }
 }

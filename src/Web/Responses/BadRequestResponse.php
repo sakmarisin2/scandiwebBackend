@@ -2,7 +2,7 @@
 
 namespace Web\Responses;
 
-use Web\WebServices\ResponseStrategy;
+use Web\WebServices\Interfaces\ResponseStrategy;
 
 class BadRequestResponse implements ResponseStrategy {
     public function handle($data): void {

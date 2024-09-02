@@ -2,7 +2,7 @@
 
 namespace Application\Validation\Rules;
 
-use Domain\Interfaces\ValidationRule;
+use Application\Validation\Rules\ValidationRule;
 
 class IntegerRule implements ValidationRule {
     public function validate($value): bool{

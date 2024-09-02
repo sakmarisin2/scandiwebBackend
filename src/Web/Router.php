@@ -2,9 +2,9 @@
 
 namespace Web;
 
-use Web\WebServices\RouterInterface;
 use Web\Controllers\ProductController;
-use Web\WebServices\BaseController;
+use Web\WebServices\Interfaces\RouterInterface;
+use Web\WebServices\Abstracts\BaseController;
 use Web\RequestState\DeleteState;
 use Web\RequestState\PostState;
 use Web\RequestState\GetState;

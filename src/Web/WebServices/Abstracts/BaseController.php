@@ -1,8 +1,8 @@
 <?php
 
-namespace Web\WebServices;
+namespace Web\WebServices\Abstracts;
 
-use Web\WebServices\RequestState;
+use Web\WebServices\Interfaces\RequestState;
 
 abstract class BaseController{
     abstract protected function getPayload():void;

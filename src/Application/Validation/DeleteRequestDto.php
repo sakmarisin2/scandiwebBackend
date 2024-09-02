@@ -2,11 +2,11 @@
 
 namespace Application\Validation;
 
-use Domain\Core\BaseProductDto;
+use Web\WebServices\Abstracts\BaseRequestDto;
 use Application\Validation\Rules\ArrayRule;
 use Application\Validation\Rules\IntegerRule;
 
-class DeleteRequestDto extends BaseProductDto{
+class DeleteRequestDto extends BaseRequestDto{
 
     private array $ids = [];
     private array $errors = [];
@@ -18,9 +18,9 @@ class DeleteRequestDto extends BaseProductDto{
         $this -> setAttributes($attributes);
     }
     public function setAttributes(array $attributes): void{
-        $this ->validate('array',$attributes);
+        $this ->validate('array',$attributes,$this->validationRules);
         foreach($attributes as $value){
-            $this ->validate('integer',$value);
+            $this ->validate('integer',$value,$this->validationRules);
         }
         $this-> ids = $attributes;
     }
@@ -35,15 +35,5 @@ class DeleteRequestDto extends BaseProductDto{
     public function hasErrors(): bool
     {
         return !empty($this->errors);
-    }
-
-    private function validate(string $field, $value): void
-    {
-        $rules = $this->validationRules[$field] ?? [];
-        foreach ($rules as $rule) {
-            if (!$rule->validate($value)) {
-                $this->errors[] = $rule->getErrorMessage();
-            }
-        }
     }
 }

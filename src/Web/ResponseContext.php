@@ -2,7 +2,7 @@
 
 namespace Web;
 
-use Web\WebServices\ResponseStrategy;
+use Web\WebServices\Interfaces\ResponseStrategy;
 
 class ResponseContext {
     private ResponseStrategy $strategy;

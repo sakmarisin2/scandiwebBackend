@@ -6,7 +6,7 @@ use Domain\Interfaces\FactoryInterface;
 use Web\Responses\BadRequestResponse;
 use Web\Responses\SuccessResponse;
 use Web\Responses\CreatedResponse;
-use Web\WebServices\ResponseStrategy;
+use Web\WebServices\Interfaces\ResponseStrategy;
 
 class ResponseFactory implements FactoryInterface{
     public static function create($condition): ResponseStrategy {
