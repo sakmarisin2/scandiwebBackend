@@ -8,8 +8,8 @@ class Furniture extends BaseProduct{
 
     private array $attributes = [];
 
-    public function __construct(string $name, 
-                                string $SKU, 
+    public function __construct(string $SKU,
+                                string $name,  
                                 int $price, 
                                 int $typeId,
                                 int $height,

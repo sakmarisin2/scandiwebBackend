@@ -7,7 +7,7 @@ abstract class BaseProduct{
     protected string $SKU;
     protected int $price;
     protected int $typeId;
-    public function __construct(string $name, string $SKU, int $price, int $typeId) {
+    public function __construct(string $name ,string $SKU,int $price, int $typeId) {
         $this->setName($name);
         $this->setSKU($SKU);
         $this->setPrice($price);
