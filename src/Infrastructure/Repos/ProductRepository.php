@@ -91,7 +91,7 @@ class ProductRepository extends BaseRepository{
             throw new Exception($e->getMessage(), $e->getCode());
         }
     }
-    public function delete($productIds = []): string{
+    public function delete(array $productIds): string{
         try{
             $this->conn->beginTransaction();
 

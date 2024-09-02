@@ -8,24 +8,26 @@ use Application\Validation\Rules\IntegerRule;
 
 class DeleteRequestDto extends BaseRequestDto{
 
-    private array $ids = [];
-    private array $errors = [];
-    private array $validationRules = [
-        'integer' => [new IntegerRule()],
-        'array' => [new ArrayRule()]
-    ];
+    protected array $attributes;
+    protected array $errors = [];
+    private array $validationRules = [];
     public function __construct(array $attributes) {
+        $this-> validationRules =[
+            'integer' => [new IntegerRule()],
+            'array' => [new ArrayRule()]
+        ];
+        
         $this -> setAttributes($attributes);
     }
     public function setAttributes(array $attributes): void{
-        $this ->validate('array',$attributes,$this->validationRules);
+        $this ->validate($attributes,$this->validationRules['array']);
         foreach($attributes as $value){
-            $this ->validate('integer',$value,$this->validationRules);
+            $this ->validate($value,$this->validationRules['integer']);
         }
-        $this-> ids = $attributes;
+        $this-> attributes = $attributes;
     }
     public function getAttributes(): array{
-        return $this ->ids;
+        return $this ->attributes;
     }
     public function getErrors(): array
     {

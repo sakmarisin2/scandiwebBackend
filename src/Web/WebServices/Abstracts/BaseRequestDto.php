@@ -17,7 +17,7 @@ abstract class BaseRequestDto {
         return !empty($this->errors);
     }
 
-    protected function validate(string $field, $value, array $rules): void {
+    protected function validate($value, array $rules): void {
         foreach ($rules as $rule) {
             if (!$rule->validate($value)) {
                 $this->errors[] = $rule->getErrorMessage();

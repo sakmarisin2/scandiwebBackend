@@ -14,20 +14,21 @@ class PostRequestDto extends BaseRequestDto{
     private string $SKU;
     private int $price;
     private int $typeId;
-    private array $attributes;
-    private array $errors = [];
-    private array $validationRules = [
-        'string' => [new NotEmptyRule(), 
-                     new HtmlSpecialCharsRule(),
-                     new NotNumericRule()],
-        'integer' => [new IntegerRule()],
-        'array' => [new ArrayRule()]
-    ];
+    protected array $attributes;
+    protected array $errors = [];
+    private array $validationRules = [];
     public function __construct(string $SKU, 
                                 string $name, 
                                 int $price, 
                                 int $typeId,
                                 array $attributes) {
+        $this->validationRules = [
+            'string' => [new NotEmptyRule(), 
+                         new HtmlSpecialCharsRule(),
+                         new NotNumericRule()],
+            'integer' => [new IntegerRule()],
+            'array' => [new ArrayRule()]
+        ];
         $this->setName($name);
         $this->setSKU($SKU);
         $this->setPrice($price);
@@ -35,7 +36,7 @@ class PostRequestDto extends BaseRequestDto{
         $this->setAttributes($attributes);
     }
     public function setSKU(string $SKU):void{
-        $this -> validate('string',$SKU,$this->validationRules);
+        $this -> validate($SKU,$this->validationRules['string']);
         $this->SKU=$SKU;
     }
     public function getSKU():string{
@@ -43,7 +44,7 @@ class PostRequestDto extends BaseRequestDto{
     }
 
     public function setName(string $name):void{
-        $this -> validate('string',$name,$this->validationRules);
+        $this -> validate($name,$this->validationRules['string']);
         $this->name=$name;
     }
     public function getName():string{
@@ -51,7 +52,7 @@ class PostRequestDto extends BaseRequestDto{
     }
 
     public function setPrice(int $price):void{
-        $this -> validate('integer',$price,$this->validationRules);
+        $this -> validate($price,$this->validationRules['integer']);
         $this->price = $price;
     }
     public function getPrice():int{
@@ -59,16 +60,16 @@ class PostRequestDto extends BaseRequestDto{
     }
 
     public function setType(int $typeId):void{
-        $this -> validate('integer',$typeId,$this->validationRules);
+        $this -> validate($typeId,$this->validationRules['integer']);
         $this->typeId= $typeId;
     }
     public function getType():int{
         return $this->typeId;
     }
     public function setAttributes(array $attributes): void{
-        $this -> validate('array',$attributes,$this->validationRules);
+        $this -> validate($attributes,$this->validationRules['array']);
         foreach($attributes as $key=>$value){
-            $this -> validate('string',$value,$this->validationRules);
+            $this -> validate($value,$this->validationRules['integer']);
         }
         $this->attributes = $attributes;
     }
