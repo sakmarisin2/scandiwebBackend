@@ -19,7 +19,7 @@ class ProductRepository extends BaseRepository{
         try{
             $this->conn->beginTransaction();
 
-            $stmt = $this->conn->prepare("INSERT INTO " . self::TABLE ."(name, type_id,SKU,price) VALUES (?, ?,?, ?)");
+            $stmt = $this->conn->prepare("INSERT INTO " . self::TABLE ."(name,type_id,SKU,price) VALUES (?,?,?,?)");
             $stmt->execute([$product-> getName(), 
                             $product-> getType(),
                             $product-> getSKU(),
@@ -53,21 +53,38 @@ class ProductRepository extends BaseRepository{
             $stmt -> execute();
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $products = [];
-
+        
             foreach ($results as $row) {
-                if (!isset($products[$row['product_id']])) {
-                    $products[$row['product_id']] = new ProductDto(
-                        $row['product_id'],
-                        $row['SKU'],
-                        $row['product_name'],
-                        $row['price'],
-                        $row['product_type'],
-                        $row['attributes'],
-                    );
+                $productId = (int) $row['product_id'];
+                if (!isset($products[$productId])) {
+                    $products[$productId] = [
+                        'id' => $productId,
+                        'SKU' => $row['SKU'],
+                        'name' => $row['product_name'],
+                        'price' => (float) $row['price'],
+                        'type' => $row['product_type'],
+                        'attributes' => []
+                    ];
+                }
+    
+                if (!empty($row['attribute_name']) && !empty($row['attribute_value'])) {
+                    $products[$productId]['attributes'][$row['attribute_name']] = $row['attribute_value'];
                 }
             }
-
-            return $products;
+    
+            $productDtos = [];
+            foreach ($products as $productData) {
+                $productDtos[$productData['id']] = new ProductDto(
+                    $productData['id'],
+                    $productData['SKU'],
+                    $productData['name'],
+                    $productData['price'],
+                    $productData['type'],
+                    $productData['attributes']
+                );
+            }
+    
+            return $productDtos;
 
         }catch(Exception $e){
 

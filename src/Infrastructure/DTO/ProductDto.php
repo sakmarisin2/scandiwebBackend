@@ -2,19 +2,19 @@
 
 namespace Infrastructure\DTO;
 
-use Domain\Core\BaseProduct;
+use Domain\Core\BaseProductDto;
 
-class ProductDto extends BaseProduct{
+class ProductDto extends BaseProductDto{
     private int $id;
     private array $attributes;
 
     public function __construct(int $id,
-                                string $name, 
                                 string $SKU, 
-                                int $price, 
-                                int $typeId,
+                                string $name, 
+                                float $price, 
+                                string $type,
                                 array $attributes) {
-        parent::__construct($name, $SKU, $price, $typeId);
+        parent::__construct($name, $SKU, $price, $type);
         $this-> setId($id);
         $this->setAttributes($attributes);   
     }
@@ -36,8 +36,8 @@ class ProductDto extends BaseProduct{
             'id' => $this->getId(),
             'SKU' => $this->getSKU(),
             'name' => $this->getName(),
-            'price' => $this->getPrice(),
-            'typeId' => $this->getType(),
+            'price' => number_format($this->getPrice(), 2),
+            'type' => $this->getType(),
             'attributes' => $this->getAttributes()
         ];
     }
