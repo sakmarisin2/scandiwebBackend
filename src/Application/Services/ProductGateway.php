@@ -20,7 +20,7 @@ class ProductGateway implements GatewayInterface{
             $env["NAME"],
             $env["USER"],
             $env["PSWD"],
-            $env["PORT"],
+            $env["SQL_PORT"],
             $env["CERT_PATH"]
         );
         $this ->repository = new ProductRepository($database -> getConnection());

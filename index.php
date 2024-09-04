@@ -10,20 +10,22 @@ use Web\Router;
 Autoloader::register();
 
 set_exception_handler(['Application\Services\ErrorHandler', 'handleException']);
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header("Content-type: application/json; charset=UTF-8");
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, GET, DELETE, PUT, PATCH, OPTIONS');
+header('Access-Control-Allow-Headers: X-Requested-With,Authorization,Content-Type');
+header('Access-Control-Max-Age: 1728000');
+header('Content-Type: application/json; charset=UTF-8');
+
+if (strtolower($_SERVER['REQUEST_METHOD']) == 'options') {
+    http_response_code(204);
+    exit();
+}
 
 $url = trim($_SERVER["REQUEST_URI"],"/");
 $parts = explode("/",$url);
 
 $endpoint = $parts[0] ?? '';
 $method = $_SERVER['REQUEST_METHOD'];
-if ($method === 'OPTIONS') {
-    http_response_code(200);
-    exit;
-}
 $router = new Router($endpoint,$method);
 $router ->route();
 
