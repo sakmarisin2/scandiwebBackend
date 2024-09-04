@@ -14,14 +14,13 @@ class ProductGateway implements GatewayInterface{
 
     public function __construct()
     {
-        $env = parse_ini_file('.env');
         $database = new Database(
-            $env["HOST"],
-            $env["NAME"],
-            $env["USER"],
-            $env["PSWD"],
-            $env["SQL_PORT"],
-            $env["CERT_PATH"]
+            getenv("HOST"),
+            getenv("NAME"),
+            getenv("USER"),
+            getenv("PSWD"),
+            getenv("SQL_PORT"),
+            getenv("CERT_PATH")
         );
         $this ->repository = new ProductRepository($database -> getConnection());
     }
