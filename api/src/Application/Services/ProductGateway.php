@@ -32,8 +32,11 @@ class ProductGateway implements GatewayInterface{
         return $products;
     }
 
-    public function createProduct(PostRequestDto $data): int{
-
+    public function createProduct(PostRequestDto $data): ?int{
+        $exist = $this ->repository->productExistsBySku($data -> getSKU());
+        if($exist){
+            return null;
+        }
         $product = ProductFactory::create($data);
 
         $result = $this ->repository -> insert($product);

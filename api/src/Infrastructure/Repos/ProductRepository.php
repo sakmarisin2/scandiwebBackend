@@ -110,4 +110,14 @@ class ProductRepository extends BaseRepository{
             throw new Exception($e->getMessage(), $e->getCode());
         }
     }
+    public function productExistsBySku($sku) {
+        $stmt = $this->conn->prepare("SELECT COUNT(*) FROM " . self::TABLE . " WHERE SKU = :sku");
+
+        $stmt->bindParam(':sku', $sku);
+        $stmt->execute();
+
+        $count = $stmt->fetchColumn();
+
+        return $count > 0;
+    }
 }

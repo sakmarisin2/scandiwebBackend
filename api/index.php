@@ -10,8 +10,8 @@ use Web\Router;
 Autoloader::register();
 
 set_exception_handler(['Application\Services\ErrorHandler', 'handleException']);
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, GET, DELETE, PUT, PATCH, OPTIONS');
+header('Access-Control-Allow-Origin: https://scandiwebfront.onrender.com/');
+header('Access-Control-Allow-Methods: POST, GET, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: X-Requested-With,Authorization,Content-Type');
 header('Access-Control-Max-Age: 1728000');
 header('Content-Type: application/json; charset=UTF-8');
